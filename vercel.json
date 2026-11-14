@@ -1,0 +1,46 @@
+{
+  "buildCommand": "python3 scripts/website.py check && npm run docs:build && mkdir -p website/_site/rea && cp -r docs/.vitepress/dist/. website/_site/rea/",
+  "installCommand": "HUSKY=0 npm ci --engine-strict=false --include=dev --no-audit --no-fund && (python3 -m pip install --break-system-packages -r website/requirements.txt || uv pip install --system -r website/requirements.txt)",
+  "outputDirectory": "website/_site",
+  "git": {
+    "deploymentEnabled": true
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "<https://rea.tools/.well-known/ard.json>; rel=\"ard\", <https://rea.tools/.well-known/ai-catalog.json>; rel=\"ai-catalog\", <https://rea.tools/.well-known/agent-skills/index.json>; rel=\"related\"; type=\"application/json\"; title=\"Agent skills index\""
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/ai-catalog.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/ai-catalog+json"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}
